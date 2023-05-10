@@ -1,15 +1,43 @@
-maquette 1 : 
-ip address 10.2.2.2 255.255.255.252
-question b 
-tableau 
-zar1 : 4 zar2 : 2 zar3 : 2
-question C
-ZA-R1 et ZA-R3 ont chacun besoin d'au moins une route statique pour atteindre les réseaux qui ne sont pas connectés directement,
- car ils ne disposent pas d'une route par défaut .
-Le routeur ZA-R2, quant à lui, pourrait avoir une route par défaut 
-question D
-Le ping n'a pas abouti car il y a une perte de paquets de 100%, ce qui signifie que le PC n'a pas réussi à atteindre l'adresse IP 10.6.6.1.
-Les délais d'attente (Request timed out) indiquent que les paquets de ping n'ont pas reçu de réponse avant l'expiration du délai imparti
-question E 
-Il semble que le ping n'a pas abouti. Le message "Request timed out" signifie que les paquets de ping n'ont pas pu atteindre la destination 
-ou obtenir une réponse dans le délai imparti. 
+network 20.20.22.1 0.0.0.255 area 0
+20.20.22.1 0.0.0.255 area 0
+gigabitE0/0 20.20.22./24
+Serial0/1/0 20.30.20.1/30
+Serial0/1/1 20.30.10.1/30
+
+
+R1(config)# router ospf 100
+R1(config-router)# network 20.20.22.0 0.0.0.255 area 0
+R1(config-router)# network 20.30.20.0 0.0.0.3 area 0
+R1(config-router)# network 20.30.10.0 0.0.0.3 area 0
+
+R1(config)# router ospf 100
+R1(config-router)# network 20.20.22.0 0.0.0.255 area 0
+R1(config-router)# network 20.30.40.0 0.0.0.3 area 0
+
+
+Backbone-Router3(config)# interface GigabitEthernet0/0
+Backbone-Router3(config-if)# shutdown
+Backbone-Router3#show ip ospf interface
+
+clear ip ospf process 
+
+
+
+
+partie 5 
+Backbone-Router4(config)# interface GigabitEthernet0/0
+Backbone-Router4(config-if)# ip address 20.30.40.1 255.255.255.0
+Backbone-Router4(config-if)# no shutdown
+
+
+
+
+Backbone-Switch(config)# interface FastEthernet0/1
+Backbone-Switch(config-if)# switchport mode access
+Backbone-Switch(config-if)# switchport access vlan 1
+Backbone-Switch(config-if)# no shutdown
+
+
+
+
+
